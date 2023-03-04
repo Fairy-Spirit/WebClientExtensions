@@ -43,7 +43,7 @@ namespace WebClientExtensions
                             bytes = await client.DownloadDataTaskAsync(url, cancellationToken);
                         });
                     }
-                    if (!task.IsCompleted)
+                    if (!task.IsCompleted && !client.IsDownloadStarted)
                     {
                         if (time >= client.Timeout)
                         {
@@ -86,10 +86,19 @@ namespace WebClientExtensions
         public int MaximumAutomaticRedirections = 50;
         public string Accept = null;
         public bool AllowAutoRedirect = true;
+        public bool IsDownloadStarted = false;
         public MyWebClient(int timeout = 2000, int trytimes = 5)
         {
             Timeout = timeout;
             TryTimes = trytimes;
+        }
+        protected override void OnDownloadProgressChanged(DownloadProgressChangedEventArgs e)
+        {
+            base.OnDownloadProgressChanged(e);
+            if(e.BytesReceived > 0)
+            {
+                IsDownloadStarted = true;
+            }
         }
         protected override WebResponse GetWebResponse(WebRequest request)
         {
