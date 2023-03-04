@@ -1,2 +1,2 @@
 # WebClientExtensions
-A WebClient extension class that effectively solves the problem of timeout retry.
+A WebClient extension class that effectively solves the problem of timeout retry by C#.
